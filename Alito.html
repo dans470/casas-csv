@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Una preguntita...</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            -webkit-tap-highlight-color: transparent; /* Evita el destello azul en móviles al tocar */
+        }
+        /* Estilos para que el botón 'NO' se mueva con una transición suave */
+        #no-btn {
+            position: absolute;
+            transition: top 0.3s ease, left 0.3s ease;
+        }
+        /* Estilos para la animación de escala del botón 'SI' */
+        #yes-btn {
+            transition: transform 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-pink-100 flex items-center justify-center h-screen overflow-hidden">
+
+    <div id="main-container" class="text-center p-4 w-full max-w-md">
+        <!-- Contenedor del GIF -->
+        <div class="flex justify-center mb-6">
+            <img id="gif-container" src="https://media.tenor.com/Nqf3-gUgySsAAAAM/cat-sad-gato-triste.gif" alt="gatito triste" class="w-48 h-48 sm:w-64 sm:h-64 object-cover rounded-lg shadow-lg">
+        </div>
+
+        <!-- Texto principal -->
+        <h1 id="main-text" class="text-2xl sm:text-3xl font-bold text-gray-800 mb-8">¿Alito, me perdonas? 🙏</h1>
+
+        <!-- Contenedor de botones. El botón 'NO' necesita un contenedor relativo para posicionarse. -->
+        <div id="buttons-container" class="relative h-32 flex items-center justify-center">
+            <!-- El botón 'NO' estará posicionado absolutamente dentro de este div -->
+            <button id="yes-btn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform active:scale-95 transition-transform duration-150 ease-in-out z-10">
+                SÍ
+            </button>
+            <button id="no-btn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-8 rounded-full shadow-lg" style="left: 60%;">
+                NO
+            </button>
+        </div>
+    </div>
+
+    <!-- Contenedor del mensaje final, inicialmente oculto -->
+    <div id="final-message" class="hidden text-center p-4">
+         <img src="https://media.tenor.com/Ao9O4SGI-cQAAAAM/sleep-cat-two-cat.gif" alt="gatitos durmiendo" class="w-48 h-48 sm:w-64 sm:h-64 object-cover rounded-lg shadow-lg mx-auto mb-6">
+        <!-- EDITA ESTE TEXTO CON TU MENSAJE FINAL -->
+        <h1 class="text-3xl sm:text-4xl font-bold text-gray-800">
+            Gracias por perdonarme Alito, voy a mejorar pq eres la mujer que siempre soñé y he venido soñando desde aquel 2018, gracias por darme la oportunidad de estar en tu vida
+            no soy perfecto pero te doy mi vida y alma por aprender a amarte, perdona que fuera una semana difícil y no estar presente de la manera que necesitabas, te amo y siempre
+            voy a tener tiempo y espacio para ti, sólo déjame conocerte, te amo Alito❤️
+        </h1>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const noBtn = document.getElementById('no-btn');
+            const yesBtn = document.getElementById('yes-btn');
+            const mainText = document.getElementById('main-text');
+            const gifContainer = document.getElementById('gif-container');
+            const mainContainer = document.getElementById('main-container');
+            const finalMessage = document.getElementById('final-message');
+            const buttonsContainer = document.getElementById('buttons-container');
+
+            let noClickCount = 0;
+            let yesButtonScale = 1;
+
+            const phrases = [
+                "te doy otro chance de pensarlo...",
+                "pero estás segura, conejita?",
+                "por favooooor, dino? 🥺",
+                "y si me dices q sí?",
+                "te doy 2 besitos, añañe",
+                "te pago",
+                "y si te doy unas papitas?🧐",
+                "pero recuerda q te puedo dar besitos si me perdonas... ):",
+                "PIENSALOOOOOO DEJA DE PICARLE AL NO",
+                "TE VOY A QUITAR EL BOTÓN MUAJAJAJAJ 🫦"
+            ];
+
+            const gifs = [
+                "https://media.tenor.com/P3RqQUUK9BAAAAAM/rip-juice-cry.gif",
+                "https://media.tenor.com/xExpUGqt4_EAAAAM/oh.gif",
+                "https://media.tenor.com/jL5e3AdC7jIAAAAM/cat-kitten.gif",
+                "https://i.imgur.com/MSy0n.gif",
+                "https://media.tenor.com/XPT5nUEaYzcAAAAM/standing-kitty.gif",
+                "https://media.tenor.com/st9EJWVgShwAAAAM/sad-cat-car.gif",
+                "https://i.pinimg.com/originals/cf/69/54/cf6954e72c5fd2d773297deb8dc66fca.gif",
+                "https://i.pinimg.com/originals/a5/ab/eb/a5abeb8419a5f2d253740f7e36af7be1.gif",
+                "https://img.buzzfeed.com/buzzfeed-static/static/2016-01/25/4/enhanced/webdr09/anigif_enhanced-16496-1453714145-6.gif",
+                "https://media.tenor.com/Nqf3-gUgySsAAAAM/cat-sad-gato-triste.gif" 
+            ];
+
+            const handleNoInteraction = () => {
+                noClickCount++;
+                
+                // Hacer el botón de SÍ más grande
+                yesButtonScale += 0.3;
+                yesBtn.style.transform = `scale(${yesButtonScale})`;
+
+                // Cambiar texto y GIF
+                const phraseIndex = Math.min(noClickCount - 1, phrases.length - 1);
+                mainText.innerText = phrases[phraseIndex];
+                gifContainer.src = gifs[phraseIndex];
+
+                // Mover el botón 'NO' a una posición aleatoria sin superponerse
+                moveButton();
+            };
+
+            noBtn.addEventListener('click', handleNoInteraction);
+            noBtn.addEventListener('mouseover', moveButton); // Mueve el botón para que sea difícil hacer clic
+
+            function moveButton() {
+                const containerRect = buttonsContainer.getBoundingClientRect();
+                const yesBtnRect = yesBtn.getBoundingClientRect();
+                const noBtnRect = noBtn.getBoundingClientRect();
+
+                // La posición del botón 'SI' es relativa al flujo normal, pero para evitar la superposición,
+                // necesitamos sus coordenadas relativas al contenedor de botones.
+                const yesBtnRelativeLeft = yesBtn.offsetLeft;
+                const yesBtnRelativeTop = yesBtn.offsetTop;
+                const yesBtnRelativeRight = yesBtnRelativeLeft + yesBtnRect.width;
+                const yesBtnRelativeBottom = yesBtnRelativeTop + yesBtnRect.height;
+                
+                let newLeft, newTop, overlap;
+
+                do {
+                    // Genera nuevas posiciones aleatorias dentro del contenedor
+                    newTop = Math.random() * (containerRect.height - noBtnRect.height);
+                    newLeft = Math.random() * (containerRect.width - noBtnRect.width);
+
+                    const noBtnNewRight = newLeft + noBtnRect.width;
+                    const noBtnNewBottom = newTop + noBtnRect.height;
+
+                    // Comprueba si la nueva posición del botón 'NO' se superpone con el botón 'SI'
+                    overlap = (
+                        newLeft < yesBtnRelativeRight &&
+                        noBtnNewRight > yesBtnRelativeLeft &&
+                        newTop < yesBtnRelativeBottom &&
+                        noBtnNewBottom > yesBtnRelativeTop
+                    );
+
+                } while (overlap); // Sigue intentando hasta encontrar una posición sin superposición
+
+                noBtn.style.top = `${newTop}px`;
+                noBtn.style.left = `${newLeft}px`;
+            }
+
+            yesBtn.addEventListener('click', () => {
+                // Ocultar el contenido principal y mostrar el mensaje final
+                mainContainer.classList.add('hidden');
+                finalMessage.classList.remove('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
+
